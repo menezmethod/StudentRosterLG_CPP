@@ -14,20 +14,23 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up C++ environment
-      uses: actions/setup-cpp@v2
-      with:
-        cmake-version: '3.23.x'
-        ninja-version: 'latest'
+    - name: Set up CMake
+      uses: lukka/get-cmake@v4
+
+    - name: Set up environment
+      run: |
+        sudo apt update
+        sudo apt install -y g++ make
+        # Add more packages or different compilers if needed
 
     - name: Create Build Directory
       run: mkdir -p build
       working-directory: ${{ github.workspace }}
 
     - name: Configure CMake
-      run: cmake -S . -B build
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
       working-directory: ${{ github.workspace }}
 
     - name: Build Project
-      run: cmake --build build --config Release
+      run: cmake --build build
       working-directory: ${{ github.workspace }}
