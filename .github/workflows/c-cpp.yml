@@ -1,0 +1,33 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up C++ environment
+      uses: actions/setup-cpp@v2
+      with:
+        cmake-version: '3.23.x'
+        ninja-version: 'latest'
+
+    - name: Create Build Directory
+      run: mkdir -p build
+      working-directory: ${{ github.workspace }}
+
+    - name: Configure CMake
+      run: cmake -S . -B build
+      working-directory: ${{ github.workspace }}
+
+    - name: Build Project
+      run: cmake --build build --config Release
+      working-directory: ${{ github.workspace }}
